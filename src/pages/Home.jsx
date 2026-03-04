@@ -33,10 +33,10 @@ const Home = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#0b0b0b] text-white overflow-hidden relative">
+    <div className="min-h-screen bg-black text-white overflow-hidden relative">
       {/* background glow */}
 
-      <div className="absolute -top-40 -left-40 w-[500px] h-[500px] bg-blue-600/20 blur-[140px] rounded-full"></div>
+      <div className="absolute -top-40 -left-40 w-[500px] h-[500px] bg-gray-300/20 blur-[140px] rounded-full"></div>
       <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-green-500/20 blur-[140px] rounded-full"></div>
 
       {/* ================= NAVBAR ================= */}
@@ -66,7 +66,7 @@ const Home = () => {
 
             <button
               onClick={() => navigate("/login")}
-              className="px-4 py-2 rounded-lg bg-white text-black hover:bg-gray-200 font-medium"
+              className="px-4 py-2 rounded-lg bg-white text-black hover:bg-white/85 font-medium"
             >
               Get Started
             </button>
@@ -86,7 +86,7 @@ const Home = () => {
         >
           <h1 className="text-5xl md:text-6xl font-bold leading-tight">
             Turn Ideas Into
-            <span className="block text-blue-400">Real Websites</span>
+            <span className="block text-white/50">Real Websites</span>
           </h1>
 
           <p className="mt-6 text-zinc-400 max-w-md">
@@ -98,7 +98,7 @@ const Home = () => {
           <div className="flex gap-4 mt-8">
             <button
               onClick={() => navigate("/login")}
-              className="px-6 py-3 rounded-lg bg-blue-500 hover:bg-blue-600"
+              className="px-6 py-3 rounded-lg bg-white text-black hover:bg-white/85"
             >
               Start Building
             </button>
@@ -239,7 +239,7 @@ const Home = () => {
 
         <button
           onClick={() => navigate("/login")}
-          className="mt-8 px-8 py-4 rounded-xl bg-blue-500 hover:bg-blue-600 font-semibold"
+          className="mt-8 px-8 py-4 rounded-xl bg-white text-black hover:bg-white/85 font-semibold"
         >
           Get Started
         </button>
