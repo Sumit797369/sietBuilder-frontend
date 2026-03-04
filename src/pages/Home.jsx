@@ -42,6 +42,22 @@ const Home = () => {
     Get Started
 </button>
         </section>
+        <section className='max-w-7xl mx-auto'>
+            <div className='grid grid-cols-1 md:grid-cols-3 gap-10'>
+                {highlights.map((h,i)=>(
+                    <motion.div
+                     key={i} 
+                     initial={{opacity:0,y:20}}
+        animate={{opacity:1,y:0}}
+        className='rounded-2xl bg-white/5 border border-white/10 p-8'>
+            <h1 className='text-xl font-semibold mb-3'>{h}</h1>
+            <p>genoSite builds real websites - code ,animations,responsiveness and scalable structure.</p>
+        </motion.div>
+                ))}
+
+            </div>
+
+        </section>
     </div>
   )
 }
