@@ -244,6 +244,132 @@ const Home = () => {
           Get Started
         </button>
       </section>
+       <footer className="bg-black border-t border-white/10 mt-32">
+
+      <div className="max-w-7xl mx-auto px-6 py-16 grid md:grid-cols-4 gap-10">
+
+        {/* Logo + About */}
+
+        <div>
+          <h2 className="text-xl font-semibold">
+            GenoSite
+          </h2>
+
+          <p className="text-zinc-400 text-sm mt-4">
+            Generate modern websites using AI prompts.
+            Build, customize and deploy faster than ever.
+          </p>
+        </div>
+
+
+        {/* Product */}
+
+        <div>
+          <h3 className="font-semibold mb-4">
+            Product
+          </h3>
+
+          <ul className="space-y-2 text-sm text-zinc-400">
+
+            <li className="hover:text-white cursor-pointer">
+              Features
+            </li>
+
+            <li className="hover:text-white cursor-pointer">
+              Pricing
+            </li>
+
+            <li className="hover:text-white cursor-pointer">
+              Integrations
+            </li>
+
+          </ul>
+        </div>
+
+
+        {/* Resources */}
+
+        <div>
+          <h3 className="font-semibold mb-4">
+            Resources
+          </h3>
+
+          <ul className="space-y-2 text-sm text-zinc-400">
+
+            <li className="hover:text-white cursor-pointer">
+              Documentation
+            </li>
+
+            <li className="hover:text-white cursor-pointer">
+              Guides
+            </li>
+
+            <li className="hover:text-white cursor-pointer">
+              Support
+            </li>
+
+          </ul>
+        </div>
+
+
+        {/* Company */}
+
+        <div>
+          <h3 className="font-semibold mb-4">
+            Company
+          </h3>
+
+          <ul className="space-y-2 text-sm text-zinc-400">
+
+            <li className="hover:text-white cursor-pointer">
+              About
+            </li>
+
+            <li className="hover:text-white cursor-pointer">
+              Contact
+            </li>
+
+            <li className="hover:text-white cursor-pointer">
+              Privacy Policy
+            </li>
+
+          </ul>
+        </div>
+
+      </div>
+
+
+      {/* Bottom bar */}
+
+      <div className="border-t border-white/10">
+
+        <div className="max-w-7xl mx-auto px-6 py-6 flex flex-col md:flex-row justify-between items-center text-sm text-zinc-500">
+
+          <p>
+            © 2026 GenoSite. All rights reserved.
+          </p>
+
+          <div className="flex gap-4 mt-4 md:mt-0">
+
+            <span className="hover:text-white cursor-pointer">
+              Twitter
+            </span>
+
+            <span className="hover:text-white cursor-pointer">
+              GitHub
+            </span>
+
+            <span className="hover:text-white cursor-pointer">
+              LinkedIn
+            </span>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </footer>
     </div>
   );
 };
