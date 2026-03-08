@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import Login from "../components/Login";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -372,6 +373,7 @@ const Home = () => {
       </div>
 
     </footer>
+    {openLogin && <Login open={openLogin} onClose={() => setOpenLogin(false)} />}
     </div>
   );
 };
