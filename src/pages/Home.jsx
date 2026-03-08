@@ -10,6 +10,8 @@ const Home = () => {
   const [text, setText] = useState("");
   const [step, setStep] = useState(0);
 
+  const [openLogin, setOpenLogin] = useState(false);
+
   // typing animation
   useEffect(() => {
     let index = 0;
