@@ -62,13 +62,15 @@ const Home = () => {
           <div className="flex gap-6 items-center">
             <button
               onClick={() => navigate("/pricing")}
+              
               className="text-zinc-400 hover:text-white"
             >
               Pricing
             </button>
 
             <button
-              onClick={() => navigate("/login")}
+              // onClick={() => navigate("/login")} 
+              onClick={() => setOpenLogin(true)}
               className="px-4 py-2 rounded-lg bg-white text-black hover:bg-white/85 font-medium"
             >
               Get Started
@@ -100,7 +102,8 @@ const Home = () => {
 
           <div className="flex gap-4 mt-8">
             <button
-              onClick={() => navigate("/login")}
+              // onClick={() => navigate("/login")}
+              onClick={() => setOpenLogin(true)}
               className="px-6 py-3 rounded-lg bg-white text-black hover:bg-white/85"
             >
               Start Building
@@ -241,7 +244,8 @@ const Home = () => {
         </p>
 
         <button
-          onClick={() => navigate("/login")}
+          onClick={() => setOpenLogin(true)}
+          // onClick={() => navigate("/login")}
           className="mt-8 px-8 py-4 rounded-xl bg-white text-black hover:bg-white/85 font-semibold"
         >
           Get Started
@@ -373,7 +377,7 @@ const Home = () => {
       </div>
 
     </footer>
-    {openLogin && <Login open={openLogin} onClose={() => setOpenLogin(false)} />}
+   <Login open={openLogin} onClose={() => setOpenLogin(false)} />
     </div>
   );
 };
