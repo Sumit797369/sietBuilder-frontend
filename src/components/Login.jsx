@@ -34,7 +34,7 @@ const Login = ({ open, onClose }) => {
         {/* Title */}
 
         <h2 className="text-2xl font-semibold mb-2">
-          Welcome Back
+          Welcome
         </h2>
 
         <p className="text-sm text-zinc-400 mb-6">
@@ -44,7 +44,7 @@ const Login = ({ open, onClose }) => {
 
         {/* Email */}
 
-        <div className="mb-4">
+        {/* <div className="mb-4">
 
           <label className="text-sm text-zinc-400">
             Email
@@ -56,12 +56,12 @@ const Login = ({ open, onClose }) => {
             className="mt-2 w-full bg-black/40 border border-white/10 rounded-lg px-4 py-3 text-sm outline-none focus:border-white/30"
           />
 
-        </div>
+        </div> */}
 
 
         {/* Password */}
 
-        <div className="mb-6">
+        {/* <div className="mb-6">
 
           <label className="text-sm text-zinc-400">
             Password
@@ -73,25 +73,25 @@ const Login = ({ open, onClose }) => {
             className="mt-2 w-full bg-black/40 border border-white/10 rounded-lg px-4 py-3 text-sm outline-none focus:border-white/30"
           />
 
-        </div>
+        </div> */}
 
 
         {/* Login Button */}
-
+{/* 
         <button
           className="w-full py-3 rounded-lg bg-white text-black font-medium hover:bg-zinc-200 transition"
         >
           Login
-        </button>
+        </button> */}
 
 
         {/* Divider */}
 
-        <div className="flex items-center gap-3 my-6 text-xs text-zinc-500">
+        {/* <div className="flex items-center gap-3 my-6 text-xs text-zinc-500">
           <div className="flex-1 h-px bg-white/10"></div>
           OR
           <div className="flex-1 h-px bg-white/10"></div>
-        </div>
+        </div> */}
 
 
         {/* Google Login */}
@@ -108,10 +108,10 @@ const Login = ({ open, onClose }) => {
 
 
         {/* Footer */}
-
+{/* 
         <p className="text-xs text-zinc-400 text-center mt-6">
           Don't have an account? <span className="text-white cursor-pointer">Sign up</span>
-        </p>
+        </p> */}
 
       </motion.div>
 
