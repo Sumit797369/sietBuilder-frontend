@@ -99,7 +99,11 @@ const Login = ({ open, onClose }) => {
         <button
           className="w-full py-3 rounded-lg border border-white/10 hover:bg-white/10 text-sm transition"
         >
+          <div className="relative flex items-center justify-center gap-2">
+            <img src="https://www.svgrepo.com/show/303108/google-icon-logo.svg" alt="" className="h-5 w-5" />
           Continue with Google
+          </div>
+
         </button>
 
 
