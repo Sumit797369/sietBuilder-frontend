@@ -3,6 +3,7 @@ import {BrowserRouter, Route, Routes} from "react-router-dom"
 import Home from './pages/Home'
 import Pricing from './pages/Pricing'
 import Login from './components/Login'
+export const serverUrl = "http://localhost:8000"
 const App = () => {
   return (
     

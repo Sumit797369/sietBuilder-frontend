@@ -7,38 +7,89 @@ import {
   updateProfile,
 } from "firebase/auth";
 import { auth, provider } from "../firebase";
+import axios from "axios";
+import { serverUrl } from "../App";
 
 const Login = ({ open, onClose }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [isSignup, setIsSignup] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
+
+  const handleFirebaseError = (error) => {
+    switch (error.code) {
+      case "auth/email-already-in-use":
+        setErrorMsg("This email is already registered.");
+        break;
+      case "auth/invalid-email":
+        setErrorMsg("Invalid email format.");
+        break;
+      case "auth/user-not-found":
+        setErrorMsg("No account found with this email.");
+        break;
+      case "auth/wrong-password":
+      case "auth/invalid-credential":
+        setErrorMsg("Incorrect email or password.");
+        break;
+      case "auth/network-request-failed":
+        setErrorMsg("Network error. Please try again.");
+        break;
+      case "auth/weak-password":
+        setErrorMsg("Password should be at least 6 characters.");
+        break;
+      default:
+        setErrorMsg(error.message || "An authentication error occurred.");
+    }
+  };
 
   // Google Login
   const handleGoogleAuth = async () => {
     try {
+      setErrorMsg("");
       const result = await signInWithPopup(auth, provider);
-      console.log("Google Login:", result.user);
+
+      const { data } = await axios.post(`${serverUrl}/api/auth/google`, {
+        name: result.user.displayName,
+        email: result.user.email,
+        avatar: result.user.photoURL,
+      }, {
+        withCredentials: true
+      });
+
       onClose();
     } catch (error) {
-      console.error(error);
+      if (error.code !== "auth/popup-closed-by-user") {
+        setErrorMsg(error.message || "Google auth failed.");
+      }
     }
   };
 
   // Email Login
   const handleLogin = async () => {
     try {
+      setErrorMsg("");
       const result = await signInWithEmailAndPassword(auth, email, password);
-      console.log("Logged in:", result.user);
+
+      await axios.post(`${serverUrl}/api/auth/google`, {
+        name: result.user.displayName || "User",
+        email: result.user.email,
+        avatar: result.user.photoURL || "",
+      }, {
+        withCredentials: true
+      });
+
       onClose();
     } catch (error) {
-      console.error(error.message);
+      handleFirebaseError(error);
     }
   };
 
   // Signup
   const handleSignup = async () => {
+    if (!name.trim()) return setErrorMsg("Name is required.");
     try {
+      setErrorMsg("");
       const result = await createUserWithEmailAndPassword(
         auth,
         email,
@@ -49,10 +100,17 @@ const Login = ({ open, onClose }) => {
         displayName: name,
       });
 
-      console.log("Signup successful:", result.user);
+      await axios.post(`${serverUrl}/api/auth/google`, {
+        name: name,
+        email: result.user.email,
+        avatar: "",
+      }, {
+        withCredentials: true
+      });
+
       onClose();
     } catch (error) {
-      console.error(error.message);
+      handleFirebaseError(error);
     }
   };
 
@@ -80,6 +138,13 @@ const Login = ({ open, onClose }) => {
         <h2 className="text-2xl font-semibold mb-2">
           {isSignup ? "Create Account" : "Welcome"}
         </h2>
+
+        {/* Error message display */}
+        {errorMsg && (
+          <div className="mb-4 text-sm text-red-500 bg-red-500/10 border border-red-500/20 rounded-lg p-3">
+            {errorMsg}
+          </div>
+        )}
 
         <p className="text-sm text-zinc-400 mb-6">
           {isSignup
@@ -170,8 +235,11 @@ const Login = ({ open, onClose }) => {
           {isSignup ? "Already have an account?" : "Don't have an account?"}
 
           <span
-            onClick={() => setIsSignup(!isSignup)}
-            className="text-white cursor-pointer ml-1"
+            onClick={() => {
+              setIsSignup(!isSignup);
+              setErrorMsg("");
+            }}
+            className="text-white cursor-pointer ml-1 hover:underline"
           >
             {isSignup ? "Login" : "Sign up"}
           </span>

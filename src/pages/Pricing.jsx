@@ -17,7 +17,7 @@ const Pricing = () => {
     },
     {
       name: "Standard Plan",
-      price: "$9.99/m",
+      price: "Rs.799/m",
       features: [
         "Unlimited transfers",
         "Transaction history with export options",
@@ -29,7 +29,7 @@ const Pricing = () => {
     },
     {
       name: "Pro Plan",
-      price: "$19.99/m",
+      price: "Rs.1599/m",
       features: [
         "Unlimited transfers with priority processing",
         "Comprehensive transaction analytics",
