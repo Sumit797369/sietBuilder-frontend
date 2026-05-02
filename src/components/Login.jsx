@@ -9,6 +9,7 @@ import {
 import { auth, provider } from "../firebase";
 import axios from "axios";
 import { serverUrl } from "../App";
+import { Eye, EyeOff } from "lucide-react";
 
 const Login = ({ open, onClose }) => {
   const [email, setEmail] = useState("");
@@ -16,6 +17,15 @@ const Login = ({ open, onClose }) => {
   const [name, setName] = useState("");
   const [isSignup, setIsSignup] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+
+  const validateRequired = () => {
+  if (isSignup && !name.trim()) return "Name is required";
+  if (!email.trim()) return "Email is required";
+  if (!password.trim()) return "Password is required";
+
+  return null;
+};
 
   const handleFirebaseError = (error) => {
     switch (error.code) {
@@ -49,13 +59,17 @@ const Login = ({ open, onClose }) => {
       setErrorMsg("");
       const result = await signInWithPopup(auth, provider);
 
-      const { data } = await axios.post(`${serverUrl}/api/auth/google`, {
-        name: result.user.displayName,
-        email: result.user.email,
-        avatar: result.user.photoURL,
-      }, {
-        withCredentials: true
-      });
+      const { data } = await axios.post(
+        `${serverUrl}/api/auth/google`,
+        {
+          name: result.user.displayName,
+          email: result.user.email,
+          avatar: result.user.photoURL,
+        },
+        {
+          withCredentials: true,
+        },
+      );
 
       onClose();
     } catch (error) {
@@ -67,53 +81,42 @@ const Login = ({ open, onClose }) => {
 
   // Email Login
   const handleLogin = async () => {
+     const error = validateRequired();
+  if (error) return setErrorMsg(error);
     try {
       setErrorMsg("");
-      const result = await signInWithEmailAndPassword(auth, email, password);
 
-      await axios.post(`${serverUrl}/api/auth/google`, {
-        name: result.user.displayName || "User",
-        email: result.user.email,
-        avatar: result.user.photoURL || "",
-      }, {
-        withCredentials: true
-      });
+      const { data } = await axios.post(
+        `${serverUrl}/api/auth/login`,
+        { email, password },
+        { withCredentials: true },
+      );
 
       onClose();
     } catch (error) {
-      handleFirebaseError(error);
+      setErrorMsg(error.response?.data?.message || "Login failed");
     }
   };
 
   // Signup
   const handleSignup = async () => {
-    if (!name.trim()) return setErrorMsg("Name is required.");
+    const error = validateRequired();
+  if (error) return setErrorMsg(error);
+
     try {
       setErrorMsg("");
-      const result = await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password
+
+      await axios.post(
+        `${serverUrl}/api/auth/register`,
+        { name, email, password },
+        { withCredentials: true },
       );
-
-      await updateProfile(result.user, {
-        displayName: name,
-      });
-
-      await axios.post(`${serverUrl}/api/auth/google`, {
-        name: name,
-        email: result.user.email,
-        avatar: "",
-      }, {
-        withCredentials: true
-      });
 
       onClose();
     } catch (error) {
-      handleFirebaseError(error);
+      setErrorMsg(error.response?.data?.message || "Signup failed");
     }
   };
-
   if (!open) return null;
 
   return (
@@ -184,16 +187,23 @@ const Login = ({ open, onClose }) => {
 
         {/* Password */}
 
-        <div className="mb-6">
+        <div className="relative mb-6">
           <label className="text-sm text-zinc-400">Password</label>
 
           <input
-            type="password"
+            type={showPassword ? "text" : "password"}
             placeholder="Enter password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="mt-2 w-full bg-black/40 border border-white/10 rounded-lg px-4 py-3 text-sm outline-none focus:border-white/30"
+             className="w-full bg-black/40 border border-white/10 rounded-lg px-4 py-3 text-sm outline-none focus:border-white/30 pr-12"
           />
+          <button
+            type="button"
+            onClick={() => setShowPassword(!showPassword)}
+            className="absolute right-3 top-12 -translate-y-1/2 text-zinc-400 hover:text-white"
+          >
+            {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+          </button>
         </div>
 
         {/* Login / Signup Button */}

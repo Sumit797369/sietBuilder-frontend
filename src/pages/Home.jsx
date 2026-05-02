@@ -359,10 +359,6 @@ const Home = () => {
           <div className="flex gap-4 mt-4 md:mt-0">
 
             <span className="hover:text-white cursor-pointer">
-              Twitter
-            </span>
-
-            <span className="hover:text-white cursor-pointer">
               GitHub
             </span>
 
