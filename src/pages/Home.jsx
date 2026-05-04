@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import Login from "../components/Login";
+import { useSelector } from "react-redux";
+import { Coins } from "lucide-react";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -12,7 +14,8 @@ const Home = () => {
   const [step, setStep] = useState(0);
 
   const [openLogin, setOpenLogin] = useState(false);
-
+  const { userData } = useSelector((state) => state.user);
+  const [openProfile, setOpenProfile] = useState(false);
   // typing animation
   useEffect(() => {
     let index = 0;
@@ -62,19 +65,72 @@ const Home = () => {
           <div className="flex gap-6 items-center">
             <button
               onClick={() => navigate("/pricing")}
-              
               className="text-zinc-400 hover:text-white"
             >
               Pricing
             </button>
-
-            <button
-              // onClick={() => navigate("/login")} 
-              onClick={() => setOpenLogin(true)}
-              className="px-4 py-2 rounded-lg bg-white text-black hover:bg-white/85 font-medium"
-            >
-              Get Started
-            </button>
+            {userData && (
+              <div className="hidden md:flex items-center gap-2 bg-white/5 border border-white/10 px-3 py-1.5 rounded-full backdrop-blur-md">
+                <Coins className="w-4 h-4 text-yellow-400" />
+                <span className="text-sm text-zinc-300">Credits</span>
+                <span className="text-sm font-semibold text-white">
+                  {userData?.credits}
+                </span>
+                <button className="ml-1 text-xs bg-yellow-400 text-black px-2 py-0.5 rounded-full hover:bg-yellow-300 transition">
+                  +
+                </button>
+              </div>
+            )}
+            {!userData ? (
+              <button
+                // onClick={() => navigate("/login")}
+                onClick={() => setOpenLogin(true)}
+                className="px-4 py-2 rounded-lg bg-white text-black hover:bg-white/85 font-medium"
+              >
+                Get Started
+              </button>
+            ) : (
+              <div
+                className="relative"
+                onMouseEnter={() => setOpenProfile(true)}
+                onMouseLeave={() => setOpenProfile(false)}
+              >
+                <button
+                  className="flex items-center"
+                  onClick={() => setOpenProfile(!openProfile)}
+                >
+                  <img
+                    src={
+                      userData.avatar ||
+                      `https://ui-avatars.com/api/?name=${userData.name}`
+                    }
+                    className="w-9 h-9 rounded-full border border-black object-cover"
+                  />
+                </button>
+                <AnimatePresence>
+                  {openProfile && (
+                    <>
+                      <motion.div
+                        initial={{ opacity: 0, y: -10, scale: 0.95 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: -10, scale: 0.95 }}
+                        transition={{ duration: 0.2 }}
+                        className="absolute right-0 mt-3 w-56 bg-black/80 backdrop-blur-xl border border-white/10 rounded-xl p-4 shadow-xl z-50"
+                      >
+                        <div className="flex items-center gap-3">
+                          <p className="text-sm font-semibold text-white">
+                            {userData.name}
+                          </p>
+                          <p className="text-xs text-zinc-400 truncate max-w-[140px]">
+                            {userData.email}
+                          </p>
+                        </div>
+                      </motion.div>
+                    </>
+                  )}
+                </AnimatePresence>
+              </div>
+            )}
           </div>
         </div>
       </motion.nav>
@@ -251,138 +307,95 @@ const Home = () => {
           Get Started
         </button>
       </section>
-       <footer className="bg-black border-t border-white/10 mt-32">
+      <footer className="bg-black border-t border-white/10 mt-32">
+        <div className="max-w-7xl mx-auto px-6 py-16 grid md:grid-cols-4 gap-10">
+          {/* Logo + About */}
 
-      <div className="max-w-7xl mx-auto px-6 py-16 grid md:grid-cols-4 gap-10">
+          <div>
+            <h2 className="text-xl font-semibold">Site Builder</h2>
 
-        {/* Logo + About */}
+            <p className="text-zinc-400 text-sm mt-4">
+              Generate modern websites using AI prompts. Build, customize and
+              deploy faster than ever.
+            </p>
+          </div>
 
-        <div>
-          <h2 className="text-xl font-semibold">
-            Site Builder
-          </h2>
+          {/* Product */}
 
-          <p className="text-zinc-400 text-sm mt-4">
-            Generate modern websites using AI prompts.
-            Build, customize and deploy faster than ever.
-          </p>
+          <div>
+            <h3 className="font-semibold mb-4">Product</h3>
+
+            <ul className="space-y-2 text-sm text-zinc-400">
+              <li className="hover:text-white cursor-pointer">Features</li>
+
+              <li className="hover:text-white cursor-pointer">Pricing</li>
+
+              <li className="hover:text-white cursor-pointer">Integrations</li>
+            </ul>
+          </div>
+
+          {/* Resources */}
+
+          <div>
+            <h3 className="font-semibold mb-4">Resources</h3>
+
+            <ul className="space-y-2 text-sm text-zinc-400">
+              <li className="hover:text-white cursor-pointer">Documentation</li>
+
+              <li className="hover:text-white cursor-pointer">Guides</li>
+
+              <li className="hover:text-white cursor-pointer">Support</li>
+            </ul>
+          </div>
+
+          {/* Company */}
+
+          <div>
+            <h3 className="font-semibold mb-4">Company</h3>
+
+            <ul className="space-y-2 text-sm text-zinc-400">
+              <li className="hover:text-white cursor-pointer">About</li>
+
+              <li className="hover:text-white cursor-pointer">Contact</li>
+
+              <li className="hover:text-white cursor-pointer">
+                Privacy Policy
+              </li>
+            </ul>
+          </div>
         </div>
 
+        {/* Bottom bar */}
 
-        {/* Product */}
-
-        <div>
-          <h3 className="font-semibold mb-4">
-            Product
-          </h3>
-
-          <ul className="space-y-2 text-sm text-zinc-400">
-
-            <li className="hover:text-white cursor-pointer">
-              Features
-            </li>
-
-            <li className="hover:text-white cursor-pointer">
-              Pricing
-            </li>
-
-            <li className="hover:text-white cursor-pointer">
-              Integrations
-            </li>
-
-          </ul>
-        </div>
-
-
-        {/* Resources */}
-
-        <div>
-          <h3 className="font-semibold mb-4">
-            Resources
-          </h3>
-
-          <ul className="space-y-2 text-sm text-zinc-400">
-
-            <li className="hover:text-white cursor-pointer">
-              Documentation
-            </li>
-
-            <li className="hover:text-white cursor-pointer">
-              Guides
-            </li>
-
-            <li className="hover:text-white cursor-pointer">
-              Support
-            </li>
-
-          </ul>
-        </div>
-
-
-        {/* Company */}
-
-        <div>
-          <h3 className="font-semibold mb-4">
-            Company
-          </h3>
-
-          <ul className="space-y-2 text-sm text-zinc-400">
-
-            <li className="hover:text-white cursor-pointer">
-              About
-            </li>
-
-            <li className="hover:text-white cursor-pointer">
-              Contact
-            </li>
-
-            <li className="hover:text-white cursor-pointer">
-              Privacy Policy
-            </li>
-
-          </ul>
-        </div>
-
-      </div>
-
-
-      {/* Bottom bar */}
-
-      <div className="border-t border-white/10">
-
-        <div className="max-w-7xl mx-auto px-6 py-6 flex flex-col md:flex-row justify-between items-center text-sm text-zinc-500">
-
-          {/* <p>
+        <div className="border-t border-white/10">
+          <div className="max-w-7xl mx-auto px-6 py-6 flex flex-col md:flex-row justify-between items-center text-sm text-zinc-500">
+            {/* <p>
             © 2026 GenoSite. All rights reserved.
           </p> */}
 
-          <div className="flex gap-4 mt-4 md:mt-0">
+            <div className="flex gap-4 mt-4 md:mt-0">
+              <a
+                href="https://github.com/Sumit797369"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-white cursor-pointer"
+              >
+                GitHub
+              </a>
 
-           <a
-  href="https://github.com/Sumit797369"
-  target="_blank"
-  rel="noopener noreferrer"
-  className="hover:text-white cursor-pointer"
->
-  GitHub
-</a>
-
-<a
-  href="https://www.linkedin.com/in/sumit-kumar-aab043312/?skipRedirect=true"
-  target="_blank"
-  rel="noopener noreferrer"
-  className="hover:text-white cursor-pointer"
->
-  LinkedIn
-</a>
+              <a
+                href="https://www.linkedin.com/in/sumit-kumar-aab043312/?skipRedirect=true"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-white cursor-pointer"
+              >
+                LinkedIn
+              </a>
+            </div>
           </div>
-
         </div>
-
-      </div>
-
-    </footer>
-   <Login open={openLogin} onClose={() => setOpenLogin(false)} />
+      </footer>
+      <Login open={openLogin} onClose={() => setOpenLogin(false)} />
     </div>
   );
 };

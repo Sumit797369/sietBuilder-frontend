@@ -10,6 +10,8 @@ import { auth, provider } from "../firebase";
 import axios from "axios";
 import { serverUrl } from "../App";
 import { Eye, EyeOff } from "lucide-react";
+import { useDispatch } from "react-redux";
+import { setUserData } from "../redux/userSlice";
 
 const Login = ({ open, onClose }) => {
   const [email, setEmail] = useState("");
@@ -18,7 +20,7 @@ const Login = ({ open, onClose }) => {
   const [isSignup, setIsSignup] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-
+const dispatch = useDispatch()
   const validateRequired = () => {
   if (isSignup && !name.trim()) return "Name is required";
   if (!email.trim()) return "Email is required";
@@ -70,6 +72,7 @@ const Login = ({ open, onClose }) => {
           withCredentials: true,
         },
       );
+      dispatch(setUserData(data))
 
       onClose();
     } catch (error) {
