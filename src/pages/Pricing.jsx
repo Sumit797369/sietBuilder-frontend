@@ -7,23 +7,15 @@ const Pricing = () => {
       name: "Free Plan",
       price: "Free",
       features: [
-        "Send up to 2 transfers per month",
-        "Basic transaction history",
-        "Email support",
-        "Limited currency support (USD, EUR, GBP)",
-        "Basic security features"
-      ],
+        "sirf hawa free hai milegi"
+              ],
       highlight: false
     },
     {
       name: "Standard Plan",
       price: "Rs.799/m",
       features: [
-        "Unlimited transfers",
-        "Transaction history with export options",
-        "Priority email support",
-        "Expanded currency support",
-        "Advanced security features"
+       "jbihefjiih"
       ],
       highlight: true
     },
@@ -31,11 +23,7 @@ const Pricing = () => {
       name: "Pro Plan",
       price: "Rs.1599/m",
       features: [
-        "Unlimited transfers with priority processing",
-        "Comprehensive transaction analytics",
-        "24/7 priority support",
-        "Full currency support",
-        "Enhanced security features"
+       "unlimited"
       ],
       highlight: false
     }

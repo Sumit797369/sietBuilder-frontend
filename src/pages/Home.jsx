@@ -56,7 +56,7 @@ const Home = () => {
             animate={{ opacity: 1 }}
             className="text-lg font-semibold"
           >
-            GenoSite
+            Site Builder
           </motion.h1>
 
           <div className="flex gap-6 items-center">
@@ -95,7 +95,7 @@ const Home = () => {
           </h1>
 
           <p className="mt-6 text-zinc-400 max-w-md">
-            GenoSite lets you generate full websites using AI. Just describe
+            Site Builder lets you generate full websites using AI. Just describe
             your idea and the platform builds layouts, components and responsive
             UI.
           </p>
@@ -221,7 +221,7 @@ const Home = () => {
               <h3 className="text-lg font-semibold mb-2">{item}</h3>
 
               <p className="text-sm text-zinc-400">
-                GenoSite generates modern websites using AI prompts.
+                Site Builder generates modern websites using AI prompts.
               </p>
             </motion.div>
           ),
@@ -259,7 +259,7 @@ const Home = () => {
 
         <div>
           <h2 className="text-xl font-semibold">
-            GenoSite
+            Site Builder
           </h2>
 
           <p className="text-zinc-400 text-sm mt-4">
@@ -352,20 +352,29 @@ const Home = () => {
 
         <div className="max-w-7xl mx-auto px-6 py-6 flex flex-col md:flex-row justify-between items-center text-sm text-zinc-500">
 
-          <p>
+          {/* <p>
             © 2026 GenoSite. All rights reserved.
-          </p>
+          </p> */}
 
           <div className="flex gap-4 mt-4 md:mt-0">
 
-            <span className="hover:text-white cursor-pointer">
-              GitHub
-            </span>
+           <a
+  href="https://github.com/Sumit797369"
+  target="_blank"
+  rel="noopener noreferrer"
+  className="hover:text-white cursor-pointer"
+>
+  GitHub
+</a>
 
-            <span className="hover:text-white cursor-pointer">
-              LinkedIn
-            </span>
-
+<a
+  href="https://www.linkedin.com/in/sumit-kumar-aab043312/?skipRedirect=true"
+  target="_blank"
+  rel="noopener noreferrer"
+  className="hover:text-white cursor-pointer"
+>
+  LinkedIn
+</a>
           </div>
 
         </div>
