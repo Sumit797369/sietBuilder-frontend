@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import Login from "../components/Login";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Coins } from "lucide-react";
 import axios from "axios";
 import { serverUrl } from "../App";
