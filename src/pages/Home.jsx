@@ -4,6 +4,9 @@ import { useNavigate } from "react-router-dom";
 import Login from "../components/Login";
 import { useSelector } from "react-redux";
 import { Coins } from "lucide-react";
+import axios from "axios";
+import { serverUrl } from "../App";
+import { setUserData } from "../redux/userSlice";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -16,6 +19,16 @@ const Home = () => {
   const [openLogin, setOpenLogin] = useState(false);
   const { userData } = useSelector((state) => state.user);
   const [openProfile, setOpenProfile] = useState(false);
+  const dispacth = useDispatch()
+  const handleLogout = async()=>{
+    try {
+      await axios.get(`${serverUrl}/api/auth/logout`, {withCredentials : true})
+      dispacth(setUserData(null))
+    } catch (error) {
+      console.log(error);
+      
+    }
+  }
   // typing animation
   useEffect(() => {
     let index = 0;
@@ -159,7 +172,7 @@ const Home = () => {
           View Profile
         </button>
 
-        <button className="text-sm text-red-400 hover:text-red-300 text-left">
+        <button className="text-sm text-red-400 hover:text-red-300 text-left" onClick={handleLogout}>
           Logout
         </button>
       </div>
