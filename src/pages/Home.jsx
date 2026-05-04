@@ -107,40 +107,65 @@ const Home = () => {
                     className="w-9 h-9 rounded-full border border-black object-cover"
                   />
                 </button>
-                <AnimatePresence>
-                  {openProfile && (
-                    <>
-                      <motion.div
-                        initial={{ opacity: 0, y: -10, scale: 0.95 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: -10, scale: 0.95 }}
-                        transition={{ duration: 0.2 }}
-                        className="absolute right-0 mt-3 w-56 bg-black/80 backdrop-blur-xl border border-white/10 rounded-xl p-4 shadow-xl z-50"
-                      >
-                        <div className="flex items-center gap-3">
-                          <p className="text-sm font-semibold text-white">
-                            {userData.name}
-                          </p>
-                          <p className="text-xs text-zinc-400 truncate max-w-[140px]">
-                            {userData.email}
-                          </p>
-                          <button className="md:hidden w-full flex items-center gap-2 text-smx border-b border-white/10 px-3 py-1.5 rounded-full hover:bg-white/5 ">
-                            <Coins className="w-4 h-4 text-yellow-400" />
-                            <span className="text-sm text-zinc-300">
-                              Credits
-                            </span>
-                            <span className="text-sm font-semibold text-white">
-                              {userData?.credits}
-                            </span>
-                            <button className="ml-1 text-xs bg-yellow-400 text-black px-2 py-0.5 rounded-full hover:bg-yellow-300 transition">
-                              +
-                            </button>
-                          </button>
-                        </div>
-                      </motion.div>
-                    </>
-                  )}
-                </AnimatePresence>
+       <AnimatePresence>
+  {openProfile && (
+    <motion.div
+      initial={{ opacity: 0, y: -10, scale: 0.95 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      exit={{ opacity: 0, y: -10, scale: 0.95 }}
+      transition={{ duration: 0.2 }}
+      className="
+        absolute right-0 mt-3 
+        w-[90vw] max-w-xs sm:w-64 
+        bg-black/90 backdrop-blur-xl 
+        border border-white/10 
+        rounded-xl p-4 shadow-xl z-50
+      "
+    >
+      {/* User Info */}
+      <div className="flex flex-col gap-1">
+        <p className="text-sm font-semibold text-white">
+          {userData?.name || "User"}
+        </p>
+        <p className="text-xs text-zinc-400 truncate">
+          {userData?.email}
+        </p>
+      </div>
+
+      {/* Divider */}
+      <div className="h-px bg-white/10 my-3"></div>
+
+      {/* Credits */}
+      <div className="flex items-center justify-between bg-white/5 px-3 py-2 rounded-lg md:hidden">
+        <div className="flex items-center gap-2">
+          <Coins className="w-4 h-4 text-yellow-400" />
+          <span className="text-sm text-zinc-300">Credits</span>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <span className="text-sm font-semibold text-white">
+            {userData?.credits}
+          </span>
+
+          <button className="text-xs bg-yellow-400 text-black px-2 py-0.5 rounded-full hover:bg-yellow-300 transition">
+            +
+          </button>
+        </div>
+      </div>
+
+      {/* Actions */}
+      <div className="mt-3 flex flex-col gap-2">
+        <button className="text-sm text-zinc-300 hover:text-white text-left">
+          View Profile
+        </button>
+
+        <button className="text-sm text-red-400 hover:text-red-300 text-left">
+          Logout
+        </button>
+      </div>
+    </motion.div>
+  )}
+</AnimatePresence>
               </div>
             )}
           </div>
