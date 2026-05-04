@@ -124,7 +124,7 @@ const Home = () => {
                           <p className="text-xs text-zinc-400 truncate max-w-[140px]">
                             {userData.email}
                           </p>
-                          <button>
+                          <button className="md:hidden w-full flex items-center gap-2 text-smx border-b border-white/10 px-3 py-1.5 rounded-full hover:bg-white/5 ">
                             <Coins className="w-4 h-4 text-yellow-400" />
                             <span className="text-sm text-zinc-300">
                               Credits
