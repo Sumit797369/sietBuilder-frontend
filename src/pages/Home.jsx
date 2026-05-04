@@ -124,6 +124,18 @@ const Home = () => {
                           <p className="text-xs text-zinc-400 truncate max-w-[140px]">
                             {userData.email}
                           </p>
+                          <button>
+                            <Coins className="w-4 h-4 text-yellow-400" />
+                            <span className="text-sm text-zinc-300">
+                              Credits
+                            </span>
+                            <span className="text-sm font-semibold text-white">
+                              {userData?.credits}
+                            </span>
+                            <button className="ml-1 text-xs bg-yellow-400 text-black px-2 py-0.5 rounded-full hover:bg-yellow-300 transition">
+                              +
+                            </button>
+                          </button>
                         </div>
                       </motion.div>
                     </>
