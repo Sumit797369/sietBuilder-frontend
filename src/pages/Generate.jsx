@@ -19,7 +19,7 @@ const Generate = () => {
       {/* 🔝 Navbar */}
       <div className="flex items-center justify-between px-4 sm:px-6 py-4 border-b border-white/10 bg-black/70 backdrop-blur-md sticky top-0 z-50">
         <div
-          onClick={() => navigate("/")}
+          onClick={() => navigate("/dashboard")}
           className="flex items-center gap-2 cursor-pointer hover:opacity-80 transition"
         >
           <ArrowLeft className="w-5 h-5" />
