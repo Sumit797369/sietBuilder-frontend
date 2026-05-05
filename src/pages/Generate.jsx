@@ -27,7 +27,7 @@ const Generate = () => {
         </div>
       </div>
 
-      {/* ✨ Animated Main */}
+      {/* Animated Main */}
       <div className="flex flex-col items-center justify-center px-4 text-center mt-20">
         
         {/* Heading */}
@@ -37,7 +37,7 @@ const Generate = () => {
           transition={{ duration: 0.6 }}
           className="text-3xl sm:text-5xl font-bold mb-4"
         >
-          Build your website with AI 🚀
+          Build your website with AI
         </motion.h1>
 
         {/* Subtitle */}
