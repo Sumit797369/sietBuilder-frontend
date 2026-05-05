@@ -19,6 +19,7 @@ const Home = () => {
   const [openLogin, setOpenLogin] = useState(false);
   const { userData } = useSelector((state) => state.user);
   const [openProfile, setOpenProfile] = useState(false);
+  // const navigate =useNavigate()
   const dispacth = useDispatch()
   const handleLogout = async()=>{
     try {
@@ -169,8 +170,8 @@ const Home = () => {
 
       {/* Actions */}
       <div className="mt-3 flex flex-col gap-2">
-        <button className="text-sm text-zinc-300 hover:text-white text-left">
-          View Profile
+        <button className="text-sm text-zinc-300 hover:text-white text-left" onClick={()=>navigate("/dashboard")}>
+          Dashboard
         </button>
 
         <button className="text-sm text-red-400 hover:text-red-300 text-left" onClick={handleLogout}>
@@ -210,7 +211,7 @@ const Home = () => {
           <div className="flex gap-4 mt-8">
             <button
               // onClick={() => navigate("/login")}
-              onClick={() => setOpenLogin(true)}
+              onClick={() => navigate("/dashboard")}
               className="px-6 py-3 rounded-lg bg-white text-black hover:bg-white/85"
             >
               Start Building
@@ -351,11 +352,11 @@ const Home = () => {
         </p>
 
         <button
-          onClick={() => setOpenLogin(true)}
+          // onClick={() => setOpenLogin(true)}
           // onClick={() => navigate("/login")}
           className="mt-8 px-8 py-4 rounded-xl bg-white text-black hover:bg-white/85 font-semibold"
-        >
-          Get Started
+        onClick={() => navigate("/dashboard")} >
+         {userData?"Go to dashboard": "Get Started"}
         </button>
       </section>
       <footer className="bg-black border-t border-white/10 mt-32">
