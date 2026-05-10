@@ -94,6 +94,7 @@ const dispatch = useDispatch()
         { email, password },
         { withCredentials: true },
       );
+      dispatch(setUserData(data));
 
       onClose();
     } catch (error) {
@@ -114,8 +115,10 @@ const dispatch = useDispatch()
         { name, email, password },
         { withCredentials: true },
       );
-
-      onClose();
+      
+      setIsSignup(false);
+      setErrorMsg("");
+      alert("Registration successful! Please login.");
     } catch (error) {
       setErrorMsg(error.response?.data?.message || "Signup failed");
     }
