@@ -1,9 +1,11 @@
 import React from "react";
-import { ArrowLeft, Plus } from "lucide-react";
+import { ArrowLeft, Plus, Coins } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const Dashboard = () => {
   const navigate = useNavigate();
+  const { userData } = useSelector((state) => state.user);
 
   return (
     <div className="min-h-screen bg-black text-white">
@@ -21,14 +23,25 @@ const Dashboard = () => {
           <span className="text-lg font-semibold">Dashboard</span>
         </div>
 
-        {/* Right: New Website Button */}
-        <button
-          onClick={() => navigate("/generate")}
-          className="flex items-center gap-2 bg-white text-black px-4 py-2 rounded-lg text-sm font-medium hover:bg-zinc-200 transition"
-        >
-          <Plus className="w-4 h-4" />
-          New Website
-        </button>
+        {/* Right: Credits and New Website Button */}
+        <div className="flex items-center gap-4">
+          {userData && (
+            <div className="hidden sm:flex items-center gap-2 bg-white/5 border border-white/10 px-3 py-1.5 rounded-full backdrop-blur-md">
+              <Coins className="w-4 h-4 text-yellow-400" />
+              <span className="text-sm text-zinc-300">Credits</span>
+              <span className="text-sm font-semibold text-white">
+                {userData.credits}
+              </span>
+            </div>
+          )}
+          <button
+            onClick={() => navigate("/generate")}
+            className="flex items-center gap-2 bg-white text-black px-4 py-2 rounded-lg text-sm font-medium hover:bg-zinc-200 transition"
+          >
+            <Plus className="w-4 h-4" />
+            New Website
+          </button>
+        </div>
       </div>
 
       {/* 📦 Main Content */}

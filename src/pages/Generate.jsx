@@ -1,50 +1,73 @@
-import React, { useState } from "react";
-import { ArrowLeft, Sparkles } from "lucide-react";
+import React, { useState, useMemo } from "react";
+import { ArrowLeft, Sparkles, Coins } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import axios from "axios"
+import axios from "axios";
 import { serverUrl } from "../App";
+import toast from "react-hot-toast";
+import { useDispatch, useSelector } from "react-redux";
+import { setUserData } from "../redux/userSlice";
+import { SandpackProvider, SandpackPreview } from "@codesandbox/sandpack-react";
+
 const Generate = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { userData } = useSelector((state) => state.user);
   const [prompt, setPrompt] = useState("");
   const [loading, setLoading] = useState(false);
   const [generatedWebsite, setGeneratedWebsite] = useState(null);
+  const [websiteId, setWebsiteId] = useState(null);
+  const [deploying, setDeploying] = useState(false);
+  const [deployedUrl, setDeployedUrl] = useState("");
 
   const handleGenerate = async () => {
     if (!prompt.trim()) return;
     setLoading(true);
     setGeneratedWebsite(null);
+    setDeployedUrl("");
+    const tId = toast.loading("Generating your website...");
     try {
       const result = await axios.post(`${serverUrl}/api/website/generate`, { prompt }, { withCredentials: true });
       setGeneratedWebsite(result.data.latesCode);
+      setWebsiteId(result.data.websiteId);
+      if (result.data.remainingCredits !== undefined) {
+        dispatch(setUserData({ ...userData, credits: result.data.remainingCredits }));
+      }
+      toast.success("Website generated successfully!", { id: tId });
     } catch (error) {
       console.error(error.response?.data?.message || error.message);
-      alert("Error: " + (error.response?.data?.message || error.message));
+      toast.error(error.response?.data?.message || "Generation failed", { id: tId });
     } finally {
       setLoading(false);
     }
   };
 
-  // Helper to get main HTML content
-  const getPreviewHtml = () => {
-    if (!generatedWebsite || !generatedWebsite.files) return "";
-    const htmlFile = generatedWebsite.files.find(f => f.path.endsWith(".html") || f.path === "index.html");
-    if (htmlFile) {
-      // Very basic fallback to inject other files into head if it's simple vanilla
-      let html = htmlFile.content;
-      const cssFile = generatedWebsite.files.find(f => f.path.endsWith(".css"));
-      const jsFile = generatedWebsite.files.find(f => f.path.endsWith(".js") && f.path !== "tailwind.config.js");
-      
-      if (cssFile && !html.includes(cssFile.content)) {
-        html = html.replace("</head>", `<style>${cssFile.content}</style></head>`);
-      }
-      if (jsFile && !html.includes(jsFile.content)) {
-        html = html.replace("</body>", `<script>${jsFile.content}</script></body>`);
-      }
-      return html;
+  const handleDeploy = async () => {
+    if (!websiteId) return;
+    setDeploying(true);
+    const tId = toast.loading("Deploying website...");
+    try {
+      const { data } = await axios.post(`${serverUrl}/api/website/deploy/${websiteId}`, {}, { withCredentials: true });
+      setDeployedUrl(data.url);
+      toast.success("Website deployed successfully!", { id: tId });
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Deployment failed", { id: tId });
+    } finally {
+      setDeploying(false);
     }
-    return "<h1>Code Generated! (Requires a bundler to preview)</h1><pre>" + JSON.stringify(generatedWebsite.files, null, 2) + "</pre>";
   };
+
+  // Transform files for Sandpack
+  const sandpackFiles = useMemo(() => {
+    if (!generatedWebsite || !generatedWebsite.files) return {};
+    const filesObj = {};
+    generatedWebsite.files.forEach((f) => {
+      let path = f.path;
+      if (!path.startsWith("/")) path = "/" + path;
+      filesObj[path] = f.content;
+    });
+    return filesObj;
+  }, [generatedWebsite]);
 
   return (
     <div className="min-h-screen bg-black text-white overflow-hidden flex flex-col">
@@ -60,6 +83,17 @@ const Generate = () => {
           <ArrowLeft className="w-5 h-5" />
           <span className="text-lg font-semibold">Site Builder</span>
         </div>
+
+        {/* Right: Credits Badge */}
+        {userData && (
+          <div className="flex items-center gap-2 bg-white/5 border border-white/10 px-3 py-1.5 rounded-full backdrop-blur-md">
+            <Coins className="w-4 h-4 text-yellow-400" />
+            <span className="text-sm text-zinc-300">Credits</span>
+            <span className="text-sm font-semibold text-white">
+              {userData.credits}
+            </span>
+          </div>
+        )}
       </div>
 
       <div className="flex-1 flex flex-col md:flex-row w-full max-w-[1600px] mx-auto p-4 gap-6 z-10">
@@ -160,26 +194,43 @@ const Generate = () => {
                <div className="flex items-center gap-2 px-3 py-2">
                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-zinc-600"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><line x1="3" x2="21" y1="9" y2="9"/><line x1="9" x2="9" y1="21" y2="9"/></svg>
                  <span className="text-xs text-zinc-700 font-medium">localhost:preview</span>
+                 {deployedUrl && (
+                   <a href={deployedUrl} target="_blank" rel="noopener noreferrer" className="text-xs text-blue-600 hover:underline ml-2 font-medium">Open Live Link ↗</a>
+                 )}
                </div>
-               <div className="flex items-center h-full">
-                 <div className="px-4 py-2 hover:bg-black/10 transition cursor-pointer text-zinc-700 flex items-center justify-center">
-                   <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="5" x2="19" y1="12" y2="12"/></svg>
-                 </div>
-                 <div className="px-4 py-2 hover:bg-black/10 transition cursor-pointer text-zinc-700 flex items-center justify-center">
-                   <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/></svg>
-                 </div>
-                 <div className="px-4 py-2 hover:bg-red-500 hover:text-white transition cursor-pointer text-zinc-700 flex items-center justify-center">
-                   <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" x2="6" y1="6" y2="18"/><line x1="6" x2="18" y1="6" y2="18"/></svg>
+               <div className="flex items-center h-full gap-2">
+                 {!deployedUrl && (
+                   <button 
+                     onClick={handleDeploy} 
+                     disabled={deploying} 
+                     className="text-xs font-semibold bg-blue-600 text-white px-3 py-1 rounded shadow-sm hover:bg-blue-700 transition"
+                   >
+                     {deploying ? "Deploying..." : "Deploy"}
+                   </button>
+                 )}
+                 <div className="flex items-center h-full border-l border-zinc-300 pl-1">
+                   <div className="px-4 py-2 hover:bg-black/10 transition cursor-pointer text-zinc-700 flex items-center justify-center">
+                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="5" x2="19" y1="12" y2="12"/></svg>
+                   </div>
+                   <div className="px-4 py-2 hover:bg-black/10 transition cursor-pointer text-zinc-700 flex items-center justify-center">
+                     <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/></svg>
+                   </div>
+                   <div className="px-4 py-2 hover:bg-red-500 hover:text-white transition cursor-pointer text-zinc-700 flex items-center justify-center">
+                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" x2="6" y1="6" y2="18"/><line x1="6" x2="18" y1="6" y2="18"/></svg>
+                   </div>
                  </div>
                </div>
             </div>
-            {/* Live iFrame */}
-            <iframe 
-              title="Live Preview"
-              srcDoc={getPreviewHtml()} 
-              className="w-full h-[calc(100%-48px)] bg-white border-none"
-              sandbox="allow-scripts allow-same-origin allow-popups"
-            />
+            {/* Live iFrame using Sandpack */}
+            <div className="w-full h-[calc(100%-48px)] bg-white border-none">
+              <SandpackProvider
+                template="static"
+                theme="light"
+                files={sandpackFiles}
+              >
+                <SandpackPreview showNavigator={false} showRefreshButton={false} style={{ height: "100%" }} />
+              </SandpackProvider>
+            </div>
           </motion.div>
         )}
       </div>

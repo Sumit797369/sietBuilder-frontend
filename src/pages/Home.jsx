@@ -7,6 +7,7 @@ import { Coins } from "lucide-react";
 import axios from "axios";
 import { serverUrl } from "../App";
 import { setUserData } from "../redux/userSlice";
+import toast from "react-hot-toast";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -26,9 +27,10 @@ const Home = () => {
       await axios.get(`${serverUrl}/api/auth/logout`, {withCredentials : true})
       dispacth(setUserData(null))
       setOpenProfile(false)
+      toast.success("Logged out successfully");
     } catch (error) {
       console.log(error);
-      
+      toast.error("Logout failed");
     }
   }
   // typing animation

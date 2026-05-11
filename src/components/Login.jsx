@@ -12,6 +12,7 @@ import { serverUrl } from "../App";
 import { Eye, EyeOff } from "lucide-react";
 import { useDispatch } from "react-redux";
 import { setUserData } from "../redux/userSlice";
+import toast from "react-hot-toast";
 
 const Login = ({ open, onClose }) => {
   const [email, setEmail] = useState("");
@@ -73,11 +74,13 @@ const dispatch = useDispatch()
         },
       );
       dispatch(setUserData(data))
+      toast.success("Logged in with Google successfully!");
 
       onClose();
     } catch (error) {
       if (error.code !== "auth/popup-closed-by-user") {
         setErrorMsg(error.message || "Google auth failed.");
+        toast.error(error.message || "Google auth failed.");
       }
     }
   };
@@ -95,10 +98,12 @@ const dispatch = useDispatch()
         { withCredentials: true },
       );
       dispatch(setUserData(data));
+      toast.success("Logged in successfully!");
 
       onClose();
     } catch (error) {
       setErrorMsg(error.response?.data?.message || "Login failed");
+      toast.error(error.response?.data?.message || "Login failed");
     }
   };
 
@@ -118,9 +123,10 @@ const dispatch = useDispatch()
       
       setIsSignup(false);
       setErrorMsg("");
-      alert("Registration successful! Please login.");
+      toast.success("Registration successful! Please login.");
     } catch (error) {
       setErrorMsg(error.response?.data?.message || "Signup failed");
+      toast.error(error.response?.data?.message || "Signup failed");
     }
   };
   if (!open) return null;

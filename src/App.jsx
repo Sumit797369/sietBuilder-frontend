@@ -7,6 +7,8 @@ import useGetCurrentUser from './Hooks/useGetCurrentUser'
 import { useSelector } from 'react-redux'
 import Dashboard from './pages/Dashboard'
 import Generate from './pages/Generate'
+import Preview from './pages/Preview'
+import { Toaster } from 'react-hot-toast'
 export const serverUrl = "http://localhost:8000"
 const App = () => {
   useGetCurrentUser()
@@ -14,10 +16,12 @@ const App = () => {
   return (
     
    <BrowserRouter>
+   <Toaster position="bottom-right" toastOptions={{ style: { background: '#333', color: '#fff' } }} />
    <Routes>
     <Route path='/' element={<Home />}/>
     <Route path='/dashboard' element={userData?<Dashboard/>:<Home/>}/>
     <Route path='/generate' element={userData?<Generate/>:<Home/>}/>
+    <Route path='/preview/:slug' element={<Preview />}/>
     {/* <Route path='/pricing' element={<Pricing />}/> */}
    </Routes>
    </BrowserRouter>
