@@ -7,7 +7,6 @@ import { serverUrl } from "../App";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { setUserData } from "../redux/userSlice";
-import { SandpackProvider, SandpackPreview } from "@codesandbox/sandpack-react";
 
 const Generate = () => {
   const navigate = useNavigate();
@@ -57,18 +56,47 @@ const Generate = () => {
     }
   };
 
-  // Transform files for Sandpack
-  const sandpackFiles = useMemo(() => {
-    if (!generatedWebsite || !generatedWebsite.files) return {};
-    const filesObj = {};
-    generatedWebsite.files.forEach((f) => {
-      let path = f.path;
-      if (!path.startsWith("/")) path = "/" + path;
-      filesObj[path] = f.content;
-    });
-    return filesObj;
-  }, [generatedWebsite]);
+const getPreviewHtml = () => {
+try {
+if (!generatedWebsite) return "";
 
+const parsed =
+  typeof generatedWebsite === "string"
+    ? JSON.parse(generatedWebsite)
+    : generatedWebsite;
+
+if (parsed && parsed.code) {
+  let html = parsed.code;
+
+  // Inject base tag
+  if (html.includes("<head>")) {
+    html = html.replace(
+      "<head>",
+      `<head>
+        <base target="_blank">
+      `
+    );
+  } else {
+    html = `<base target="_blank">` + html;
+  }
+
+  // Security sanitization
+  html = html
+    .replace(new RegExp('window\\.location', 'g'), "")
+    .replace(new RegExp('document\\.location', 'g'), "")
+    .replace(new RegExp('href="/', 'g'), 'href="/')
+    .replace(new RegExp("href='/", 'g'), "href='/");
+
+  return html;
+}
+
+return "<h1>No HTML found</h1>";
+
+} catch (e) {
+console.error(e);
+return "Error parsing code";
+}
+};
   return (
     <div className="min-h-screen bg-black text-white overflow-hidden flex flex-col">
       <div className="absolute -top-40 -left-40 w-[500px] h-[500px] bg-gray-300/20 blur-[140px] rounded-full pointer-events-none"></div>
@@ -221,15 +249,14 @@ const Generate = () => {
                  </div>
                </div>
             </div>
-            {/* Live iFrame using Sandpack */}
-            <div className="w-full h-[calc(100%-48px)] bg-white border-none">
-              <SandpackProvider
-                template="static"
-                theme="light"
-                files={sandpackFiles}
-              >
-                <SandpackPreview showNavigator={false} showRefreshButton={false} style={{ height: "100%" }} />
-              </SandpackProvider>
+            {/* Live iFrame */}
+            <div className="w-full h-[calc(100%-48px)] bg-white relative">
+              <iframe
+                title="Live Preview"
+                srcDoc={getPreviewHtml()}
+                className="absolute top-0 left-0 w-full h-full border-none"
+                sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+              />
             </div>
           </motion.div>
         )}
